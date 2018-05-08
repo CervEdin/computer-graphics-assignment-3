@@ -178,14 +178,16 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     // Define uniforms
     glm::mat4 model = trackballGetRotationMatrix(ctx.trackball);
 	glm::mat4 view = glm::lookAt(
-		glm::vec3(.0f, .0f, -10.0f), // Camera position
+		glm::vec3(.0f, .0f, -5.0f), // Camera position
 		glm::vec3(.0f, .0f, .0f), // Target position
 		glm::vec3(0, 1, 0)
 	);
-    glm::mat4 projection = glm::perspective(glm::radians(30.0f), 3.0f/2.0f, 0.01f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(30.0f), 1.0f, 0.01f, 100.0f);
     glm::mat4 mv = view * model;
     glm::mat4 mvp = projection * mv;
-    // ...
+    // Light source
+	glm::vec3 pos_light_pos = glm::vec3(10.f, .0f, .0f); // Positional light position, straight above
+	glm::vec3 pos_light_col = glm::vec3(1.f, 1.f, 1.f); // Positional light color, white
 
     // Activate program
     glUseProgram(program);
@@ -196,6 +198,8 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     // Pass uniforms
     glUniformMatrix4fv(glGetUniformLocation(program, "u_mv"), 1, GL_FALSE, &mv[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"), 1, GL_FALSE, &mvp[0][0]);
+	glUniform3fv(glGetUniformLocation(program, "u_pos_light_pos"), 1, &pos_light_pos[0]);
+	glUniform3fv(glGetUniformLocation(program, "u_pos_light_col"), 1, &pos_light_col[0]);
     glUniform1f(glGetUniformLocation(program, "u_time"), ctx.elapsed_time);
     // ...
 
@@ -315,8 +319,8 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    ctx.width = 500;
-    ctx.height = 500;
+    ctx.width = 1200;
+    ctx.height = 1200;
     ctx.aspect = float(ctx.width) / float(ctx.height);
     ctx.window = glfwCreateWindow(ctx.width, ctx.height, "Model viewer", nullptr, nullptr);
     glfwMakeContextCurrent(ctx.window);

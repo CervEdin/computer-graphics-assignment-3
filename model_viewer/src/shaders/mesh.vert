@@ -8,9 +8,31 @@ layout(location = 1) in vec3 a_normal;
 out vec3 v_normal;
 
 uniform mat4 u_mvp;
+uniform mat4 u_mv;
+// Uniform variables needed in frag
+uniform vec3 u_pos_light_pos;
+uniform vec3 u_pos_light_col;
+
+out vec3 v_color;
 
 void main()
 {
     v_normal = a_normal;
     gl_Position = u_mvp * a_position;
+
+	// Transform the vertex position to view space (eye coordinates)
+	vec3 position_eye = vec3(u_mv * a_position);
+
+	// Calculate the view-space normal
+	vec3 N = normalize(mat3(u_mv) * a_normal);
+
+	// Calculate the view-space light direction
+	vec3 u_light_position = vec3(0.0, 10.0, 5.0);
+	vec3 L = normalize(u_light_position - position_eye);
+
+	// Calculate the diffuse (Lambertian) reflection term
+	float diffuse = max(0.0, dot(N, L));
+
+	// Multiply the diffuse reflection term with the surface color
+	v_color = diffuse * vec3(0.0, 1.0, 0.0);
 }
