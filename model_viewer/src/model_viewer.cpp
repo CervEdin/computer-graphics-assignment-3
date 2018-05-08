@@ -177,8 +177,12 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
 {
     // Define uniforms
     glm::mat4 model = trackballGetRotationMatrix(ctx.trackball);
-    glm::mat4 view = glm::mat4();
-    glm::mat4 projection = glm::ortho(-ctx.aspect, ctx.aspect, -1.0f, 1.0f, -1.0f, 1.0f);
+	glm::mat4 view = glm::lookAt(
+		glm::vec3(.0f, .0f, -10.0f), // Camera position
+		glm::vec3(.0f, .0f, .0f), // Target position
+		glm::vec3(0, 1, 0)
+	);
+    glm::mat4 projection = glm::perspective(glm::radians(30.0f), 3.0f/2.0f, 0.01f, 100.0f);
     glm::mat4 mv = view * model;
     glm::mat4 mvp = projection * mv;
     // ...
