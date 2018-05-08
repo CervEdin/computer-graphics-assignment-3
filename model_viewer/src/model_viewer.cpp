@@ -188,6 +188,10 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     // Light source
 	glm::vec3 pos_light_pos = glm::vec3(10.f, .0f, .0f); // Positional light position, straight above
 	glm::vec3 pos_light_col = glm::vec3(1.f, 1.f, 1.f); // Positional light color, white
+	glm::vec3 ambient_color = glm::vec3(1.f, 1.f, 1.f); // 
+	glm::vec3 diffuse_color = glm::vec3(1.f, 1.f, 1.f);
+	glm::vec3 specular_color = glm::vec3(1.f, 1.f, 1.f);
+	float specular_power = .5f;
 
     // Activate program
     glUseProgram(program);
@@ -200,7 +204,11 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"), 1, GL_FALSE, &mvp[0][0]);
 	glUniform3fv(glGetUniformLocation(program, "u_pos_light_pos"), 1, &pos_light_pos[0]);
 	glUniform3fv(glGetUniformLocation(program, "u_pos_light_col"), 1, &pos_light_col[0]);
-    glUniform1f(glGetUniformLocation(program, "u_time"), ctx.elapsed_time);
+	glUniform3fv(glGetUniformLocation(program, "u_ambient_color"), 1, &ambient_color[0]);
+	glUniform3fv(glGetUniformLocation(program, "u_diffuse_color"), 1, &diffuse_color[0]);
+	glUniform3fv(glGetUniformLocation(program, "u_specular_color"), 1, &specular_color[0]);
+	glUniform1f(glGetUniformLocation(program, "u_specular_power"), specular_power);
+	glUniform1f(glGetUniformLocation(program, "u_time"), ctx.elapsed_time);
     // ...
 
     // Draw!

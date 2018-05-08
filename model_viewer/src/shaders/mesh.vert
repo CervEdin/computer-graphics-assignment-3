@@ -5,14 +5,16 @@
 layout(location = 0) in vec4 a_position;
 layout(location = 1) in vec3 a_normal;
 
-out vec3 v_normal;
-
 uniform mat4 u_mvp;
 uniform mat4 u_mv;
 
 // Uniform variables needed in frag
 uniform vec3 u_pos_light_pos;
 uniform vec3 u_pos_light_col;
+uniform vec3 ambient_color;
+uniform vec3 diffuse_color;
+uniform vec3 specular_color;
+uniform float specular_power;
 
 out vec3 N;
 out vec3 L;
@@ -22,7 +24,6 @@ out vec3 v_color;
 
 void main()
 {
-    v_normal = a_normal;
     gl_Position = u_mvp * a_position;
 
 	// Transform the vertex position to view space (eye coordinates)
