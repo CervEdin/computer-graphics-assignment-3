@@ -22,10 +22,8 @@ void main()
 	vec3 half_way = normalize(v_light + v_view);
 	vec3 illumination_ambient = u_ambient_color;
 	vec3 illumination_diffuse = u_diffuse_color * u_pos_light_col * max(dot(v_normal, v_light), 0);
-	vec3 illumination_specular = u_specular_power * u_specular_color * u_pos_light_col
-	* pow(
-		max(dot(v_normal, half_way), 0.0)
-		, u_specular_power);
+	float specAngle = max(dot(v_normal, half_way), 0.0);
+	vec3 illumination_specular = u_specular_color * u_pos_light_col * pow(specAngle, u_specular_power);
 	vec3 color = illumination_ambient;
 	color += illumination_diffuse;
 	color += illumination_specular;
