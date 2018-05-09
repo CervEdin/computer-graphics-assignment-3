@@ -167,8 +167,8 @@ void init(Context &ctx)
     createMeshVAO(ctx, ctx.mesh, &ctx.meshVAO);
 
     // Load cubemap texture(s)
-    // ...
-
+    ctx.cubemap = loadCubemap(cubemapDir() + "/Forrest/");
+    
     initializeTrackball(ctx);
 }
 
@@ -191,7 +191,7 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
 	glm::vec3 diffuse_color = glm::vec3(0.f, 0.f, 0.5f);
 	glm::vec3 ambient_color = diffuse_color * 0.01f;
 	glm::vec3 specular_color = glm::vec3(0.04f);
-	float specular_power = 16.0f;
+	float specular_power = 40.0f;
 
     // Activate program
     glUseProgram(program);
