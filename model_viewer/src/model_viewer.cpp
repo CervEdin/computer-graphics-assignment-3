@@ -57,11 +57,14 @@ struct Context {
     GLuint defaultVAO;
     GLuint cubemap;
     float elapsed_time;
+    
     bool ambient_on;
     bool diffuse_on;
     bool specular_on;
     bool gamma_on;
     bool surface_normal_rgb_on;
+    
+    float zoomFactor;
 };
 
 // Returns the value of an environment variable
@@ -194,7 +197,7 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
 		glm::vec3(.0f, .0f, .0f), // Target position
 		glm::vec3(0, 1, 0)
 	);
-    glm::mat4 projection = glm::perspective(glm::radians(30.0f), 1.0f, 0.01f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(30.0f * ctx.zoomFactor), 1.0f, 0.01f, 100.0f);
     glm::mat4 mv = view * model;
     glm::mat4 mvp = projection * mv;
     // Light source
@@ -350,6 +353,7 @@ int main(void)
     ctx.height = 1200;
     ctx.aspect = float(ctx.width) / float(ctx.height);
     ctx.window = glfwCreateWindow(ctx.width, ctx.height, "Model viewer", nullptr, nullptr);
+    ctx.zoomFactor = 1.0;
     glfwMakeContextCurrent(ctx.window);
     glfwSetWindowUserPointer(ctx.window, &ctx);
     glfwSetKeyCallback(ctx.window, keyCallback);
