@@ -180,6 +180,13 @@ void init(Context &ctx)
 // MODIFY THIS FUNCTION
 void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
 {
+    // turn on switches
+    ctx.ambient_on = true;
+    ctx.diffuse_on = true;
+    ctx.specular_on = true;
+    ctx.gamma_on = true;
+    ctx.surface_normal_rgb_on = true;
+    
     // Define uniforms
     glm::mat4 model = trackballGetRotationMatrix(ctx.trackball);
 	glm::mat4 view = glm::lookAt(
@@ -205,6 +212,12 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     // ...
 
     // Pass uniforms
+    glUniform1i(glGetUniformLocation(program, "u_ambient_on"), ctx.ambient_on);
+    glUniform1i(glGetUniformLocation(program, "u_diffuse_on"), ctx.diffuse_on);
+    glUniform1i(glGetUniformLocation(program, "u_specular_on"), ctx.specular_on);
+    glUniform1i(glGetUniformLocation(program, "u_gamma_on"), ctx.gamma_on);
+    glUniform1i(glGetUniformLocation(program, "u_surface_normal_rgb_on"), ctx.surface_normal_rgb_on);
+    
     glUniformMatrix4fv(glGetUniformLocation(program, "u_mv"), 1, GL_FALSE, &mv[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"), 1, GL_FALSE, &mvp[0][0]);
 	glUniform3fv(glGetUniformLocation(program, "u_pos_light_pos"), 1, &pos_light_pos[0]);
@@ -213,6 +226,7 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
 	glUniform3fv(glGetUniformLocation(program, "u_diffuse_color"), 1, &diffuse_color[0]);
 	glUniform3fv(glGetUniformLocation(program, "u_specular_color"), 1, &specular_color[0]);
 	glUniform1f(glGetUniformLocation(program, "u_specular_power"), specular_power);
+	
 	glUniform1f(glGetUniformLocation(program, "u_time"), ctx.elapsed_time);
     // ...
 
