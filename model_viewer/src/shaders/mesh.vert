@@ -11,10 +11,10 @@ uniform mat4 u_mv;
 // Uniform variables needed in frag
 uniform vec3 u_pos_light_pos;
 uniform vec3 u_pos_light_col;
-uniform vec3 ambient_color;
-uniform vec3 diffuse_color;
-uniform vec3 specular_color;
-uniform float specular_power;
+uniform vec3 u_ambient_color;
+uniform vec3 u_diffuse_color;
+uniform vec3 u_specular_color;
+uniform float u_specular_power;
 
 out vec3 N;
 out vec3 L;

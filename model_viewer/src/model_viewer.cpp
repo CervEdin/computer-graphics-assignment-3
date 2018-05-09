@@ -187,11 +187,11 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     glm::mat4 mvp = projection * mv;
     // Light source
 	glm::vec3 pos_light_pos = glm::vec3(10.f, .0f, .0f); // Positional light position, straight above
-	glm::vec3 pos_light_col = glm::vec3(1.f, 1.f, 1.f); // Positional light color, white
-	glm::vec3 ambient_color = glm::vec3(1.f, 1.f, 1.f); // 
-	glm::vec3 diffuse_color = glm::vec3(1.f, 1.f, 1.f);
-	glm::vec3 specular_color = glm::vec3(1.f, 1.f, 1.f);
-	float specular_power = .5f;
+	glm::vec3 pos_light_col = glm::vec3(1.f, 0.f, 0.f); // Positional light color, red
+	glm::vec3 ambient_color = glm::vec3(0.f, 0.f, 0.f); // 
+	glm::vec3 diffuse_color = glm::vec3(0.f, 0.f, 1.f);
+	glm::vec3 specular_color = glm::vec3(1.f, 0.f, 0.f);
+	float specular_power = .1f;
 
     // Activate program
     glUseProgram(program);
