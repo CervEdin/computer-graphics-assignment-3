@@ -182,14 +182,7 @@ void init(Context &ctx)
 
 // MODIFY THIS FUNCTION
 void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
-{
-    // turn on switches
-    ctx.ambient_on = true;
-    ctx.diffuse_on = true;
-    ctx.specular_on = true;
-    ctx.gamma_on = true;
-    ctx.surface_normal_rgb_on = true;
-    
+{   
     // Define uniforms
     glm::mat4 model = trackballGetRotationMatrix(ctx.trackball);
 	glm::mat4 view = glm::lookAt(
@@ -212,7 +205,9 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     glUseProgram(program);
 
     // Bind textures
-    // ...
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.cubemap);
+    glUniform1i(glGetUniformLocation(program, "u_cubemap"), 0);
 
     // Pass uniforms
     glUniform1i(glGetUniformLocation(program, "u_ambient_on"), ctx.ambient_on);
@@ -284,6 +279,7 @@ void errorCallback(int /*error*/, const char* description)
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    std::cout << key <<std::endl;
     // Forward event to GUI
     ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mods);
     if (ImGui::GetIO().WantCaptureKeyboard) { return; }  // Skip other handling
@@ -291,6 +287,16 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
     if (key == GLFW_KEY_R && action == GLFW_PRESS) {
         reloadShaders(ctx);
+    } else if (key == 49 && action == GLFW_PRESS) { //q
+        ctx->ambient_on = !ctx->ambient_on;
+    } else if (key == 50 && action == GLFW_PRESS) { //w
+        ctx->diffuse_on = !ctx->diffuse_on;
+    } else if (key == 51 && action == GLFW_PRESS) { //e
+        ctx->specular_on = !ctx->specular_on;
+    } else if (key == 52 && action == GLFW_PRESS) { //t
+        ctx->gamma_on = !ctx->gamma_on;
+    } else if (key == 53 && action == GLFW_PRESS) { //y
+        ctx->surface_normal_rgb_on = !ctx->surface_normal_rgb_on;
     }
 }
 
@@ -354,6 +360,14 @@ int main(void)
     ctx.aspect = float(ctx.width) / float(ctx.height);
     ctx.window = glfwCreateWindow(ctx.width, ctx.height, "Model viewer", nullptr, nullptr);
     ctx.zoomFactor = 1.0;
+
+    // turn on switches
+    ctx.ambient_on = true;
+    ctx.diffuse_on = true;
+    ctx.specular_on = true;
+    ctx.gamma_on = true;
+    ctx.surface_normal_rgb_on = false;
+    
     glfwMakeContextCurrent(ctx.window);
     glfwSetWindowUserPointer(ctx.window, &ctx);
     glfwSetKeyCallback(ctx.window, keyCallback);
