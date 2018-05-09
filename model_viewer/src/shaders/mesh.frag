@@ -27,5 +27,6 @@ void main()
 	vec3 color = illumination_ambient;
 	color += illumination_diffuse;
 	color += illumination_specular;
+	color = pow(color, vec3(1.0/2.2)); // sRGB gamma correction
     frag_color = vec4(color, 1.0);
 }
