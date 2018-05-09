@@ -16,9 +16,9 @@ uniform vec3 u_diffuse_color;
 uniform vec3 u_specular_color;
 uniform float u_specular_power;
 
-out vec3 N;
-out vec3 L;
-out vec3 V;
+out vec3 v_normal;
+out vec3 v_light;
+out vec3 v_view;
 
 out vec3 v_color;
 
@@ -30,16 +30,16 @@ void main()
 	vec3 position_eye = vec3(u_mv * a_position);
 
 	// Calculate the view-space normal
-	N = normalize(mat3(u_mv) * a_normal);
+	v_normal = normalize(mat3(u_mv) * a_normal);
 
 	// Calculate the view-space light direction
-	L = normalize(u_pos_light_pos - position_eye);
+	v_light = normalize(u_pos_light_pos - position_eye);
 
 	// Calculate the view-vector 
-	V = normalize(-position_eye);
+	v_view = normalize(-position_eye);
 
 	// Calculate the diffuse (Lambertian) reflection term
-	float diffuse = max(0.0, dot(N, L));
+	float diffuse = max(0.0, dot(v_normal, v_light));
 
 	// Multiply the diffuse reflection term with the surface color
 	v_color = diffuse * vec3(0.0, 1.0, 0.0);
