@@ -57,6 +57,11 @@ struct Context {
     GLuint defaultVAO;
     GLuint cubemap;
     float elapsed_time;
+    bool ambient_on;
+    bool diffuse_on;
+    bool specular_on;
+    bool gamma_on;
+    bool surface_normal_rgb_on;
 };
 
 // Returns the value of an environment variable
