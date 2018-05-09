@@ -20,10 +20,6 @@ out vec3 v_normal;
 out vec3 v_light;
 out vec3 v_view;
 
-//out vec3 v_color;
-
-//out vec3 v_textCoords;
-
 void main()
 {
     gl_Position = u_mvp * a_position;
@@ -41,10 +37,5 @@ void main()
 	v_view = normalize(-position_eye);
 
 	// Calculate the diffuse (Lambertian) reflection term
-	float diffuse = max(0.0, dot(v_normal, v_light));
-
-	// Multiply the diffuse reflection term with the surface color
-	//v_color = diffuse * vec3(0.0, 1.0, 0.0);
-	
-	//v_textCoords = a_position.xyz;
+	//float diffuse = max(0.0, dot(v_normal, v_light));
 }

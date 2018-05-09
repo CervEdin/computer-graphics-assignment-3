@@ -55,7 +55,6 @@ struct Context {
     Mesh mesh;
     MeshVAO meshVAO;
     GLuint defaultVAO;
-    GLuint cubemap;
     float elapsed_time;
     
     bool ambient_on;
@@ -65,6 +64,8 @@ struct Context {
     bool surface_normal_rgb_on;
     
     float zoomFactor;
+    int active_texture;
+    GLuint cubemap[8];
 };
 
 // Returns the value of an environment variable
@@ -175,7 +176,13 @@ void init(Context &ctx)
     createMeshVAO(ctx, ctx.mesh, &ctx.meshVAO);
 
     // Load cubemap texture(s)
-    ctx.cubemap = loadCubemap(cubemapDir() + "/Forrest/");
+    std::string prefiltered_levels[8] = { "0.5", "0.125", "2", "8", "32", "128", "512", "2048" };
+    std::string texture_name = "Forrest";
+    for (int i = 0; i < 8; i++) {
+        std::string path = cubemapDir() + "/" + texture_name + "/prefiltered/" + prefiltered_levels[i];
+        ctx.cubemap[i] = loadCubemap(path);
+    }
+    ctx.active_texture = 0;
     
     initializeTrackball(ctx);
 }
@@ -206,7 +213,7 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
 
     // Bind textures
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.cubemap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.cubemap[ctx.active_texture]);
     glUniform1i(glGetUniformLocation(program, "u_cubemap"), 0);
 
     // Pass uniforms
@@ -279,7 +286,7 @@ void errorCallback(int /*error*/, const char* description)
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    std::cout << key <<std::endl;
+    // std::cout << key <<std::endl;
     // Forward event to GUI
     ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mods);
     if (ImGui::GetIO().WantCaptureKeyboard) { return; }  // Skip other handling
@@ -287,16 +294,26 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
     if (key == GLFW_KEY_R && action == GLFW_PRESS) {
         reloadShaders(ctx);
-    } else if (key == 49 && action == GLFW_PRESS) { //q
+    } else if (key == 49 && action == GLFW_PRESS) { //1
         ctx->ambient_on = !ctx->ambient_on;
-    } else if (key == 50 && action == GLFW_PRESS) { //w
+    } else if (key == 50 && action == GLFW_PRESS) { //2
         ctx->diffuse_on = !ctx->diffuse_on;
-    } else if (key == 51 && action == GLFW_PRESS) { //e
+    } else if (key == 51 && action == GLFW_PRESS) { //3
         ctx->specular_on = !ctx->specular_on;
-    } else if (key == 52 && action == GLFW_PRESS) { //t
+    } else if (key == 52 && action == GLFW_PRESS) { //4
         ctx->gamma_on = !ctx->gamma_on;
-    } else if (key == 53 && action == GLFW_PRESS) { //y
+    } else if (key == 53 && action == GLFW_PRESS) { //5
         ctx->surface_normal_rgb_on = !ctx->surface_normal_rgb_on;
+    } else if (key == 54 && action == GLFW_PRESS) { //6
+        ctx->active_texture = 0;
+    } else if (key == 55 && action == GLFW_PRESS) { //7
+        ctx->active_texture = 1;
+    } else if (key == 56 && action == GLFW_PRESS) { //8
+        ctx->active_texture = 3;
+    } else if (key == 57 && action == GLFW_PRESS) { //9
+        ctx->active_texture = 6;
+    } else if (key == 48 && action == GLFW_PRESS) { //0
+        ctx->active_texture = 7;
     }
 }
 

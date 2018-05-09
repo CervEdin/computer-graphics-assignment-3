@@ -4,7 +4,6 @@
 in vec3 v_normal;
 in vec3 v_light;
 in vec3 v_view;
-//in vec3 v_textCoords;
 
 uniform vec3 u_pos_light_pos;
 uniform vec3 u_pos_light_col;
