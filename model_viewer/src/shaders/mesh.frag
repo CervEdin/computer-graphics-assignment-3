@@ -37,7 +37,7 @@ void main()
 	color += illumination_diffuse;
 	color += illumination_specular;
 	if (u_surface_normal_rgb_on == 1) {
-	    color = v_normal;
+	    color = v_normal*0.5 + 0.5;
 	}
 	if (u_gamma_on == 1) {
     	color = pow(color, vec3(1.0/2.2)); // sRGB gamma correction
