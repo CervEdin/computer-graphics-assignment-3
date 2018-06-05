@@ -259,6 +259,7 @@ void reloadShaders(Context *ctx)
 
 void mouseButtonPressed(Context *ctx, int button, int x, int y)
 {
+	//sstd::cout << button << std::endl;
     if (button == GLFW_MOUSE_BUTTON_LEFT) {
         ctx->trackball.center = glm::vec2(x, y);
         trackballStartTracking(ctx->trackball, glm::vec2(x, y));
@@ -361,6 +362,13 @@ void resizeCallback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
+void scrollCallback(GLFWwindow* window, double x, double y) {
+	if (ImGui::GetIO().WantCaptureMouse) { return; }  // Skip other handling   
+
+	Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
+	ctx->zoomFactor = ctx->zoomFactor + 0.1f*(float)y;
+}
+
 int main(void)
 {
     Context ctx;
@@ -392,6 +400,7 @@ int main(void)
     glfwSetMouseButtonCallback(ctx.window, mouseButtonCallback);
     glfwSetCursorPosCallback(ctx.window, cursorPosCallback);
     glfwSetFramebufferSizeCallback(ctx.window, resizeCallback);
+	glfwSetScrollCallback(ctx.window, scrollCallback);
 
     // Load OpenGL functions
     glewExperimental = true;
