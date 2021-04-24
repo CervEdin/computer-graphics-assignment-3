@@ -203,7 +203,7 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     // Light source
 	glm::vec3 pos_light_pos = glm::vec3(10.f, .0f, .0f); // Positional light position, straight above
 	glm::vec3 pos_light_col = glm::vec3(1.f, 1.f, 1.f); // Positional light color, white
-	glm::vec3 diffuse_color = glm::vec3(0.f, 0.f, 0.5f);
+	glm::vec3 diffuse_color = glm::vec3(0.3f, 0.3f, 0.0f);
 	glm::vec3 ambient_color = diffuse_color * 0.01f;
 	glm::vec3 specular_color = glm::vec3(0.04f);
 	float specular_power = 40.0f;
